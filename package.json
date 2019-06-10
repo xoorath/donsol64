@@ -1,0 +1,16 @@
+{
+  "name": "donsol64",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "init": "libdragon install",
+    "prepare": "npm run init",
+    "build": "libdragon make"
+  },
+  "author": "",
+  "license": "none",
+  "dependencies": {
+    "ed64": "^0.1.12"
+  }
+}
