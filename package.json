@@ -11,6 +11,7 @@
   "author": "",
   "license": "none",
   "dependencies": {
-    "ed64": "^0.1.12"
+    "ed64": "https://github.com/anacierdem/ed64.git",
+    "libdragon": "https://github.com/anacierdem/libdragon.git"
   }
 }

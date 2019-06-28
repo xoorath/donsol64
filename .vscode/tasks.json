@@ -22,7 +22,16 @@
                     "severity": 4,
                     "message": 5
                 }
-            }
+            },
+            "presentation": {
+                "showReuseMessage": false,
+                "clear": true,
+                "echo": false,
+                "revealProblems": "onProblem",
+                "focus": true,
+                "group": "true",
+                "reveal": "always"
+           }
         }
     ]
 }

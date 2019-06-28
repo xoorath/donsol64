@@ -5,15 +5,14 @@ MKDFSPATH = $(ROOTDIR)/bin/mkdfs
 HEADERPATH = $(ROOTDIR)/mips64-elf/lib
 N64TOOL = $(ROOTDIR)/bin/n64tool
 HEADERNAME = header
-LINK_FLAGS = -L$(ROOTDIR)/mips64-elf/lib -led64 -ldragon -lc -lm -ldragonsys -Tn64.ld
-CFLAGS = -std=gnu99 -march=vr4300 -mtune=vr4300 -O2 -Wall -I$(ROOTDIR)/mips64-elf/include
-CXXFLAGS = -std=c++11 -march=vr4300 -mtune=vr4300 -O2 -Wall -I$(ROOTDIR)/mips64-elf/include
+LINK_FLAGS = -L$(ROOTDIR)/mips64-elf/lib -led64 -ldragon -lc -lm -lstdc++ -ldragonsys -Tn64.ld
+CFLAGS = -std=c++11 -march=vr4300 -mtune=vr4300 -O2 -fno-exceptions -Wall -Werror -I$(ROOTDIR)/mips64-elf/include
 ASFLAGS = -mtune=vr4300 -march=vr4300
 CC = $(GCCN64PREFIX)gcc
-CXX = $(GCCN64PREFIX)g++
 AS = $(GCCN64PREFIX)as
 LD = $(GCCN64PREFIX)ld
 OBJCOPY = $(GCCN64PREFIX)objcopy
+OBJDUMP = $(GCCN64PREFIX)objdump
 
 BUILD_PATH = $(CURDIR)/build
 OBJDIR = $(BUILD_PATH)
@@ -35,26 +34,19 @@ $(PROG_NAME)$(ROM_EXTENSION): $(PROG_NAME).elf
 	$(N64TOOL) $(N64_FLAGS) -t "Donsol64"
 	$(CHKSUM64PATH) $(PROG_NAME)$(ROM_EXTENSION)
 
-CSOURCES =  ${wildcard $(SOURCE_PATH)/*.c}
 CPPSOURCES =  ${wildcard $(SOURCE_PATH)/*.cpp}
 
-SOURCEOBJ = ${patsubst $(SOURCE_PATH)/%,$(OBJDIR)/%,$(CSOURCES:.c=.o)} ${patsubst $(SOURCE_PATH)/%,$(OBJDIR)/%,$(CPPSOURCES:.cpp=.o)}
-
-$(OBJDIR)/%.o: $(SOURCE_PATH)/%.c
-	mkdir -p $(BUILD_PATH)
-	$(CC) -c -o $@ $< $(CFLAGS)
+SOURCEOBJ = ${patsubst $(SOURCE_PATH)/%,$(OBJDIR)/%,$(CPPSOURCES:.cpp=.o)}
 
 
 $(OBJDIR)/%.o: $(SOURCE_PATH)/%.cpp
 	mkdir -p $(BUILD_PATH)
-	$(CXX) -c -o $@ $< $(CXXFLAGS)
+	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(PROG_NAME).elf: $(SOURCEOBJ)
 	$(LD) -o $@ $^ $(LINK_FLAGS)
 
 all: $(PROG_NAME)$(ROM_EXTENSION)
-
-.PHONY: clean
 
 clean:
 	rm -rf $(BUILD_PATH)/*
